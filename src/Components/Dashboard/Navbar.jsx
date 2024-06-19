@@ -5,8 +5,9 @@ import { useAppContext } from "../AppContext";
 import axios from "axios";
 const Navbar = () => {
   const navigate = useNavigate();
-  const { isLogin, handleupdateStatus, userdata, handleLogout,hasProifile } =
-    useAppContext();
+  const { isLogin, handleupdateStatus, userdata, handleLogout } =useAppContext();
+  const [hasProifile,setHasProfile] = useState(false)
+
   const [show, setShow] = useState(false);
   const [data, setData] = useState();
   useEffect(() => {
@@ -15,6 +16,7 @@ const Navbar = () => {
       const url = `${process.env.REACT_APP_ABOUT_URL}/${id}`;
       axios.get(url).then((res) => {
         setProfileImg(res.data?.imageurl);
+        setHasProfile(userdata.hasProifile)
       });
     }
   });
@@ -34,6 +36,7 @@ const Navbar = () => {
   const handleCreateProfile = () => {
     navigate("/createprofile");
   };
+  console.log(localStorage.getItem("hasprofile"))
   return (
     <div className="navbar">
       <div className="logo left">
@@ -41,7 +44,7 @@ const Navbar = () => {
       </div>
       {isLogin ? (
         <div className="right">
-          {hasProifile && (<div className="btn">
+          {(localStorage.getItem("hasprofile")==="false") && (<div className="btn">
             <button onClick={handleCreateProfile}>Create Profile</button>
           </div>)}
           <div className="btn">

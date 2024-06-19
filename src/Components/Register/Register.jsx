@@ -11,7 +11,6 @@ const Register = () => {
     const {handleLoginUser} = useAppContext();
 
      const [firstName, setFirstName] = useState("");
-    const [middleName, setMiddleName] = useState("");
     const [lastName, setLastName] = useState("");
    
     const [email, setEmail] = useState("");
@@ -22,7 +21,7 @@ const Register = () => {
     const navigate = useNavigate()
     const handleLoginBtn = async () => {
         const signupData = {
-            username : username,
+            username : firstName,
             email : email,
             password : password
         }

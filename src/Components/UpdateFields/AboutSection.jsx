@@ -64,11 +64,11 @@ const uploadImage = async ()=>{
       {
         const id = userdata._id
         const url = `${process.env.REACT_APP_ABOUT_URL}/add/${id}`
-        axios.post(url,savedata)
-        .then(res=>{
-          axios.post(`${process.env.REACT_APP_BASE_URL}/update/${id}`,{userdata})
+        axios.post(`${process.env.REACT_APP_BASE_URL}/users/update/${id}`,{userdata})
           .then(res=>{console.log("created profile succesfully")})
           .catch(err=>console.log("error  " + err))
+        axios.post(url,savedata)
+        .then(res=>{
           Swal.fire({
             title : "Success",
             text : res.data,

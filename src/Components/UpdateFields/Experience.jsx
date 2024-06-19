@@ -112,7 +112,7 @@ const Experience = ({ update }) => {
     const id = localStorage.getItem("userid");
     const url = `${process.env.REACT_APP_EX_URL}/${userdata._id}`;
     try {
-      if (experienceDetails.length < 1 && isLogin ) {
+      if (experienceDetails.length < 1 && isLogin && update ) {
         axios
           .get(url)
           .then((response) => {

@@ -33,7 +33,8 @@ export const AppProvider = ({ children }) => {
   const handleLoginUser = (data) => {
     setUserdata(data);
     setCurrentUserId(data._id);
-    setHasProfile(data.hasProfile);
+    localStorage.setItem("hasprofile",data.hasProfile)
+    console.log("the profile is alreadt there?????" , hasProfile)
     localStorage.setItem("userid", data._id);
     Cookies.setItem("authToken", "pwd123456!@3", { expires: 1 });
   };
@@ -51,33 +52,6 @@ export const AppProvider = ({ children }) => {
 
   //data for templates
 
-  const [educationDetailsForTemplate,setEducationDetailsForTemplate] = useState()
-  const getEducationDetailsForTemplate = ()=>{
-    const url = `${process.env.REACT_APP_ED_URL}/${userdata._id}`;
-    axios
-          .get(url)
-          .then((response) => {
-            setEducationDetailsForTemplate(response.data);
-          })
-          .catch((err) => {
-            console.log("error" + err);
-          });
-        console.log("the educationDetailsforTemplate:" + educationDetailsForTemplate);
-  }
-
-  const [experienceDataForTemplates,setExperienceDataForTemplates] = useState()
-  const getExperienceDataForTemplates = ()=>{
-    const url = `${process.env.REACT_APP_EX_URL}/${userdata._id}`;
-    axios
-          .get(url)
-          .then((response) => {
-            setExperienceDataForTemplates(response.data);
-          })
-          .catch((err) => {
-            console.log("error" + err);
-          });
-        console.log("the experienceDetails:" + experienceDataForTemplates);
-  }
 
   return (
     <AppContext.Provider
@@ -90,10 +64,7 @@ export const AppProvider = ({ children }) => {
         currentUserId,
         handleCreateFormState,
         hasProfile,
-        experienceDataForTemplates,
-        getExperienceDataForTemplates,
-        educationDetailsForTemplate,
-        getEducationDetailsForTemplate
+ 
       }}
     >
       {children}

@@ -10,8 +10,10 @@ import ExperienceField from './Experience/ExperienceField'
 import Projects from './Projects/Projects'
 import Certification from './Certification/Certification'
 import Skills from './Skills/Skills'
+import { useNavigate } from 'react-router-dom'
 const Template1 = () => {
   const {userdata} = useAppContext()
+  const navigator = useNavigate()
   const [savedata, setSaveData] = useState([]);
   const [gotData,setGotData] = useState(true)
   useEffect(() => {
@@ -30,10 +32,13 @@ const Template1 = () => {
       console.log()
     }
   });
+  const handleTemplateClose = ()=>{
+    navigator("/dashboard")
+  }
   console.log("the svaed data " ,savedata)
   return (
     <div className="template-container">
-      {console.log(savedata)}
+      <div className="close-button"><button onClick={handleTemplateClose}>close</button></div>
       <Sidebar profile={savedata.imageurl} username={userdata.username} desc={savedata.description}/>
       <div className="container">
         <section className="sectiontab" id='home'><Home username={userdata.username}  desc={savedata.description}/></section>
