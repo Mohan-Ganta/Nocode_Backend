@@ -44,7 +44,28 @@ const CertificationTab = ({index,item,onRemove}) => {
 
 
 const Certifications = ({update}) => {
-  const {userdata , certificationData , addCertificationData} = useAppContext()
+  const {userdata , isLogin} = useAppContext()
+  const [certificationData, setCertificationData] = useState([]);
+  const addCertificationData = (elem) => {
+    setCertificationData([...certificationData, elem]);
+  };
+  useEffect(() => {
+    const id = localStorage.getItem("userid");
+    const url = `${process.env.REACT_APP_CERT_URL}/${id}`;
+    try {
+      if (isLogin && certificationData.length < 1 ) {
+        axios
+          .get(url)
+          .then((res) => {
+            setCertificationData(res.data);
+          })
+          .catch((err) => console.log("error" + err));
+      }
+    } catch (err) {
+      console.log("err");
+    }
+  });
+
     const [certification, setCertification] = useState([
         {
             "name":"",
@@ -87,14 +108,14 @@ const Certifications = ({update}) => {
                 if("_id" in certificationData[i])
                   {
                     const id = certificationData[i]._id
-                    const url = `http://localhost:5000/certificates/update/${id}`
+                    const url = `${process.env.REACT_APP_CERT_URL}/update/${id}`
                     axios.post(url,certificationData[i])
                     .then(res=>console.log(res.data))
                     .catch(err=>console.log(err))
                   }
                   else{
                     const id = userdata._id
-                    const url = `http://localhost:5000/certificates/add/${id}`
+                    const url = `${process.env.REACT_APP_CERT_URL}/add/${id}`
                     axios.post(url,certificationData[i])
                     .then(res=>console.log(res.json))
                     .catch(err=>console.log(err))
@@ -108,7 +129,7 @@ const Certifications = ({update}) => {
           }
           else{
             const id = userdata._id 
-            const url = `http://localhost:5000/certificates/add/${id}`
+            const url = `${process.env.REACT_APP_CERT_URL}/add/${id}`
             for(var i=0;i<certification.length;i++)
               {
                 axios.post(url,certification[i])

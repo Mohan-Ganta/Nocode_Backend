@@ -43,7 +43,25 @@ const SkillsTab = ({ index, item, onRemove, len }) => {
 };
 
 const Skills = ({ update }) => {
-  const { skillData, userdata, addSkillData } = useAppContext();
+  const { isLogin ,userdata} = useAppContext();
+  const [skillData, setSkillData] = useState([]);
+  const addSkillData = (elem) => {
+    setSkillData([...skillData, elem]);
+  };
+  useEffect(() => {
+    const id = localStorage.getItem("userid");
+    const url = `${process.env.REACT_APP_SKILLS_URL}/${id}`;
+    try {
+      if (isLogin && skillData.length < 1) {
+        axios
+          .get(url)
+          .then((res) => setSkillData(res.data))
+          .catch((err) => console.log("error"));
+      }
+    } catch (err) {
+      console.log("error" + err);
+    }
+  });
   const [skills, setSkills] = useState([
     {
       skill: "",
@@ -55,7 +73,7 @@ const Skills = ({ update }) => {
       for (var i = 0; i < skillData.length; i++) {
         if ("_id" in skillData[i]) {
           const id = skillData[i]._id;
-          const url = `http://localhost:5000/skills/update/${id}`;
+          const url = `${process.env.REACT_APP_SKILLS_URL}/update/${id}`;
 
           axios
             .post(url, skillData[i])
@@ -65,7 +83,7 @@ const Skills = ({ update }) => {
             });
         } else {
           const id = userdata._id;
-          const url = `http://localhost:5000/skills/add/${id}`;
+          const url = `${process.env.REACT_APP_SKILLS_URL}/add/${id}`;
           axios
             .post(url, skillData[i])
             .then((res) => console.log(res.data))
@@ -79,7 +97,7 @@ const Skills = ({ update }) => {
       });
     } else {
       const id = userdata._id;
-      const url = `http://localhost:5000/skills/add/${id}`;
+      const url = `${process.env.REACT_APP_SKILLS_URL}/add/${id}`;
 
       for (var i = 0; i < skills.length; i++) {
         axios

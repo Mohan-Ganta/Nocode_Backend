@@ -1,141 +1,83 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Cookies from "js-cookies";
+import { useNavigate } from "react-router-dom";
 const AppContext = createContext();
 export const useAppContext = () => useContext(AppContext);
 
 export const AppProvider = ({ children }) => {
-  const setCookie = (token) => {
-    Cookies.set("name", token, { expires: 10 });
-  }; 
-
-  const handleupdateStatus = (val)=>{
-    setIsUpdate(val)
-  }
-  const [isUpdate ,setIsUpdate] = useState(false)
+  const handleupdateStatus = (val) => {
+    setIsUpdate(val);
+  };
+  const [isUpdate, setIsUpdate] = useState(false);
   const [userdata, setUserdata] = useState({});
   const [isLogin, setIsLogin] = useState(false);
+  const [currentUserId, setCurrentUserId] = useState();
+  const [isCreated , setIsCreated] = useState(false)
+  const [hasProfile,setHasProfile] = useState(false)
+
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = Cookies.getItem("authToken");
+    const currentUserdata = localStorage.getItem("userdata");
+    if (token) setIsLogin(true);
+    const url = `${process.env.REACT_APP_USER_URL}/${localStorage.getItem("userid")}`;
+    axios
+      .get(url)
+      .then((res) => setUserdata(res.data))
+      .catch((err) => console.log("error" + err));
+  });
+
+
   const handleLoginUser = (data) => {
-    console.log(data);
     setUserdata(data);
-    setIsLogin(true);
+    setCurrentUserId(data._id);
+    setHasProfile(data.hasProfile);
+    localStorage.setItem("userid", data._id);
+    Cookies.setItem("authToken", "pwd123456!@3", { expires: 1 });
   };
 
-
-  //Education Details
-  const [educationDetails, setEducationDetails] = useState([]);
-  const addEducationDetails = (elem) => {
-    setEducationDetails([...educationDetails, elem]);
+  const handleLogout = () => {
+    Cookies.removeItem("authToken");
+    localStorage.removeItem("userid");
+    setIsLogin(false);
+    navigate("/");
   };
 
-  useEffect(() => {
-    const id = userdata._id;
-    const url = `http://localhost:5000/education/${id}`;
-    try {
-      if (educationDetails.length < 1 && isLogin && isUpdate) {
-        axios
+  const handleCreateFormState = (val)=>{
+    setIsCreated(val)
+  }
+
+  //data for templates
+
+  const [educationDetailsForTemplate,setEducationDetailsForTemplate] = useState()
+  const getEducationDetailsForTemplate = ()=>{
+    const url = `${process.env.REACT_APP_ED_URL}/${userdata._id}`;
+    axios
           .get(url)
           .then((response) => {
-            setEducationDetails(response.data);
+            setEducationDetailsForTemplate(response.data);
           })
           .catch((err) => {
             console.log("error" + err);
           });
-        console.log("education details" + educationDetails);
-      }
-    } catch (err) {
-      console.log("error" + err);
-    }
-  });
+        console.log("the educationDetailsforTemplate:" + educationDetailsForTemplate);
+  }
 
-  //Experience Details
-  const [experienceDetails, setExperienceDetails] = useState([]);
-  const addExperienceDetails = (elem) => {
-    setExperienceDetails([...experienceDetails, elem]);
-  };
-  useEffect(() => {
-    const id = userdata._id;
-    const url = `http://localhost:5000/experience/${id}`;
-    try {
-      if (experienceDetails.length < 1 && isLogin && isUpdate) {
-        axios
+  const [experienceDataForTemplates,setExperienceDataForTemplates] = useState()
+  const getExperienceDataForTemplates = ()=>{
+    const url = `${process.env.REACT_APP_EX_URL}/${userdata._id}`;
+    axios
           .get(url)
           .then((response) => {
-            setExperienceDetails(response.data);
+            setExperienceDataForTemplates(response.data);
           })
           .catch((err) => {
             console.log("error" + err);
           });
-        console.log("the experienceDetails:" + experienceDetails);
-      }
-    } catch (err) {
-      console.log("error" + err);
-    }
-  });
-
-  //Projects Details
-  const [projectData, setProjectData] = useState([]);
-  const addProjectData = (elem) => {
-    setProjectData([...projectData, elem]);
-  };
-  useEffect(() => {
-    const id = userdata._id;
-    const url = `http://localhost:5000/projects/${id}`;
-    try {
-      if (isLogin && projectData.length < 1 && isUpdate) {
-        axios
-          .get(url)
-          .then((res) => {
-            setProjectData(res.data);
-          })
-          .catch((err) => console.log(err));
-      }
-    } catch (err) {
-      console.log("some error");
-    }
-  });
-
-  //Certification Data
-  const [certificationData, setCertificationData] = useState([]);
-  const addCertificationData = (elem) => {
-    setCertificationData([...certificationData, elem]);
-  };
-  useEffect(() => {
-    const id = userdata._id;
-    const url = `http://localhost:5000/certificates/${id}`;
-    try {
-      if (isLogin && certificationData.length < 1  && isUpdate) {
-        axios
-          .get(url)
-          .then((res) => {
-            setCertificationData(res.data);
-          })
-          .catch((err) => console.log("error" + err));
-      }
-    } catch (err) {
-      console.log("err");
-    }
-  });
-
-  //skills data
-  const [skillData, setSkillData] = useState([]);
-  const addSkillData = (elem) => {
-    setSkillData([...skillData, elem]);
-  };
-  useEffect(() => {
-    const id = userdata._id;
-    const url = `http://localhost:5000/skills/${id}`;
-    try {
-      if (isLogin && skillData.length < 1 && isUpdate) {
-        axios
-          .get(url)
-          .then((res) => setSkillData(res.data))
-          .catch((err) => console.log("error"));
-      }
-    } catch (err) {
-      console.log("error" + err);
-    }
-  });
+        console.log("the experienceDetails:" + experienceDataForTemplates);
+  }
 
   return (
     <AppContext.Provider
@@ -143,17 +85,15 @@ export const AppProvider = ({ children }) => {
         userdata,
         isLogin,
         handleLoginUser,
-        educationDetails,
-        addEducationDetails,
-        experienceDetails,
-        addExperienceDetails,
-        projectData,
-        addProjectData,
-        certificationData,
-        addCertificationData,
-        skillData,
-        addSkillData,
-        handleupdateStatus
+        handleupdateStatus,
+        handleLogout,
+        currentUserId,
+        handleCreateFormState,
+        hasProfile,
+        experienceDataForTemplates,
+        getExperienceDataForTemplates,
+        educationDetailsForTemplate,
+        getEducationDetailsForTemplate
       }}
     >
       {children}

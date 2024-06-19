@@ -12,7 +12,7 @@ const Login = () => {
     const {handleLoginUser} = useAppContext();
     const navigate = useNavigate()
     const handleLoginBtn = async () => {
-        const url = `http://localhost:5000/users/login/${email}/${password}`
+        const url = `${process.env.REACT_APP_USER_URL}/login/${email}/${password}`
         await axios.get(url)
         .then(res=>{
           handleLoginUser(res.data)

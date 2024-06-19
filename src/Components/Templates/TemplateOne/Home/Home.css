@@ -1,0 +1,17 @@
+.home-container{
+    width: 80vw;
+    height: 100vh;
+}
+
+.home-container h2{
+    margin: 30px;
+    text-align: start;
+    color: white;
+    font-size: 50px;
+}
+.home-container h3{
+    margin: 0px 30px;
+    text-align: start;
+    color: white;
+    font-size: 40px;
+}

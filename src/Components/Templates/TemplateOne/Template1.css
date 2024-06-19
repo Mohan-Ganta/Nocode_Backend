@@ -1,0 +1,16 @@
+.template-container{
+    display: flex;
+}
+.container{
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    width: 80vw;
+}
+.sectiontab{
+    border: 2px solid black;
+    height: 100vh;
+    width: 80vw;
+    background-color: aqua;
+    
+}

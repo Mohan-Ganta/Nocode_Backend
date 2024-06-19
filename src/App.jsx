@@ -8,6 +8,7 @@ import Login from "./Components/Login/Login";
 import { AppProvider } from "./Components/AppContext";
 import CreateProfile from "./Components/CreateProfile";
 import Register from "./Components/Register/Register";
+import Template1 from "./Components/Templates/TemplateOne/Template1";
 
 function App() {
   return (
@@ -21,10 +22,11 @@ function App() {
           <Route path="/createprofile" element={<CreateProfile />} />
           <Route path="/templates" element={<Templates />} />
           <Route path="/update" element={<UpdateProfilePage />} />
+          <Route path="/template1" element={<Template1 />} />
         </Routes>
         </AppProvider>
       </BrowserRouter>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

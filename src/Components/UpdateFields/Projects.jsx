@@ -44,7 +44,28 @@ const ProjectsTab = ({index,item,onRemove}) => {
   
 const Projects = ({update}) => {
 
-  const {userdata , projectData , addProjectData} = useAppContext()
+  const {userdata ,isLogin } = useAppContext()
+  const [projectData, setProjectData] = useState([]);
+  const addProjectData = (elem) => {
+    setProjectData([...projectData, elem]);
+  };
+  useEffect(() => {
+    const id = localStorage.getItem("userid");
+    const url = `${process.env.REACT_APP_PRO_URL}/${id}`;
+    try {
+      if (isLogin && projectData.length < 1 ) {
+        axios
+          .get(url)
+          .then((res) => {
+            setProjectData(res.data);
+          })
+          .catch((err) => console.log(err));
+      }
+    } catch (err) {
+      console.log("some error");
+    }
+  });
+
     const [projects, setProjects] = useState([
         {
             "name":"",
@@ -88,14 +109,14 @@ const Projects = ({update}) => {
                 if("_id" in projectData[i])
                   {
                     const id = projectData[i]._id 
-                    const url = `http://localhost:5000/projects/update/${id}`
+                    const url = `${process.env.REACT_APP_PRO_URL}/update/${id}`
                     axios.post(url,projectData[i])
                     .then(res=>{console.log(res.data)})
                     .catch(err=>console.log(err))
                   }
                   else{
                     const id = userdata._id 
-                    const url = `http://localhost:5000/projects/add/${id}`
+                    const url = `${process.env.REACT_APP_PRO_URL}/add/${id}`
                     axios.post(url,projectData[i])
                     .then(res=>{console.log("lakjashfkajghfgd"+res.data)})
                     .catch(err=>console.log("............errorrrrr"+err))
@@ -109,7 +130,7 @@ const Projects = ({update}) => {
           }
           else{
             const id = userdata._id 
-            const url = `http://localhost:5000/projects/add/${id}`
+            const url = `${process.env.REACT_APP_PRO_URL}/add/${id}`
             for(var i=0 ; i<projects.length ;i++)
               {
                 axios.post(url,projects[i])

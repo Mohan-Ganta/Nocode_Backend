@@ -103,7 +103,30 @@ const ExperienceTab = ({ index, item, onRemove }) => {
   );
 };
 const Experience = ({ update }) => {
-  const { experienceDetails, addExperienceDetails, userdata } = useAppContext();
+  const {  userdata , isLogin } = useAppContext();
+  const [experienceDetails, setExperienceDetails] = useState([]);
+  const addExperienceDetails = (elem) => {
+    setExperienceDetails([...experienceDetails, elem]);
+  };
+  useEffect(() => {
+    const id = localStorage.getItem("userid");
+    const url = `${process.env.REACT_APP_EX_URL}/${userdata._id}`;
+    try {
+      if (experienceDetails.length < 1 && isLogin ) {
+        axios
+          .get(url)
+          .then((response) => {
+            setExperienceDetails(response.data);
+          })
+          .catch((err) => {
+            console.log("error" + err);
+          });
+        console.log("the experienceDetails:" + experienceDetails);
+      }
+    } catch (err) {
+      console.log("error" + err);
+    }
+  });
 
   const [experience, setExperience] = useState([
     {
@@ -121,9 +144,10 @@ const Experience = ({ update }) => {
       for (var i = 0; i < experienceDetails.length; i++) {
         if ("_id" in experienceDetails[i]) {
           const id = experienceDetails[i]._id;
-          const url = `http://localhost:5000/experience/update/${id}`;
+          const url = `${process.env.REACT_APP_EX_URL}/update/${id}`;
           axios.post(url,experienceDetails[i])
           .then((res)=>{
+            
             console.log(res.data)
           })
           .catch(err=>console.log(err))
@@ -131,7 +155,7 @@ const Experience = ({ update }) => {
         else{
           console.log("id not present")
           const id = userdata._id 
-          const url = `http://localhost:5000/experience/add/${id}`
+          const url = `${process.env.REACT_APP_EX_URL}/add/${id}`
           axios.post(url,experienceDetails[i])
           .then((res)=>console.log(res.data))
           .catch(err=>console.log(err))
@@ -149,7 +173,7 @@ const Experience = ({ update }) => {
       });
     } else {
       const id = userdata._id;
-      const url = `http://localhost:5000/experience/add/${id}`;
+      const url = `${process.env.REACT_APP_EX_URL}/add/${id}`;
       for (var i = 0; i < experience.length; i++) {
         axios
           .post(url, experience[i])
@@ -165,7 +189,7 @@ const Experience = ({ update }) => {
       });
     }
   };
-  const handleAddEducationSection = () => {
+  const handleAddExperienceDetails = () => {
     if (update && experienceDetails.length > 0) {
       const elem = {
         title: "",
@@ -202,7 +226,7 @@ const Experience = ({ update }) => {
       <div>
         <div className="section-tab">
           <header className="section-header">EXPERIENCE SECTION</header>
-          {update && experienceDetails.length > 0 ? (
+          {update ? (
             <div className="education-container">
               {experienceDetails.map((item, index) => {
                 return (
@@ -229,7 +253,7 @@ const Experience = ({ update }) => {
           )}
           <button
             className="btn add-section-btn"
-            onClick={handleAddEducationSection}
+            onClick={handleAddExperienceDetails}
           >
             <i class="fa-regular fa-square-plus"></i>
           </button>

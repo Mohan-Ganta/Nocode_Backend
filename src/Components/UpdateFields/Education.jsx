@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Swal from "sweetalert2";
 import { useAppContext } from "../AppContext";
-const EducationTab = ({ index, item, onRemove }) => {
+const EducationTab = ({ index, item, onRemove ,array}) => {
   const [school, setSchool] = useState(item["school"]);
   const [degree, setDegree] = useState(item["degree"]);
   const [city, setCity] = useState(item["city"]);
@@ -17,7 +17,17 @@ const EducationTab = ({ index, item, onRemove }) => {
     item["endDate"] = endDate;
     item["description"] = description;
   }, [school, degree, city, startDate, endDate, description]);
-
+const handleDelete = ()=>{
+  onRemove(array.indexOf(item))
+  console.log("deleting")
+  const url = `http://localhost:5000/education/delete/${item._id}`
+  axios.delete(url)
+  .then(res=>{
+    console.log(res.data)
+    
+  })
+  .catch(err=>console.log("error deleting"+err))
+}
   return (
     <>
       <form className="form-tab">
@@ -102,7 +112,7 @@ const EducationTab = ({ index, item, onRemove }) => {
           </div>
         </div>
       </form>
-      <button className="remove-btn btn " onClick={(index) => onRemove(index)}>
+      <button className="remove-btn btn " onClick={handleDelete}>
         <i class="fa-regular fa-square-minus"></i>
       </button>
     </>
@@ -110,8 +120,34 @@ const EducationTab = ({ index, item, onRemove }) => {
 };
 
 const Education = ({ update }) => {
-  const {userdata , educationDetails, addEducationDetails } = useAppContext();
+  // const {userdata , educationDetails, addEducationDetails } = useAppContext();
+  const {isLogin ,userdata} = useAppContext()
+  const [educationDetails, setEducationDetails] = useState([]);
+  const [isEmpty,setEmpty] = useState(true)
+  const addEducationDetails = (elem) => {
+    setEducationDetails([...educationDetails, elem]);
+  };
 
+  useEffect(() => {
+    const id = localStorage.getItem("userid");
+    const url = `http://localhost:5000/education/${id}`;
+    try {
+      if (educationDetails.length < 1 && isLogin) {
+        axios
+          .get(url)
+          .then((response) => {
+            setEducationDetails(response.data);
+            if(response.data.length===0)
+              setEmpty(false)
+          })
+          .catch((err) => {
+            console.log("error" + err);
+          });
+      }
+    } catch (err) {
+      console.log("error" + err);
+    }
+  });
   const [education, setEducation] = useState([
     {
       school: "",
@@ -137,7 +173,6 @@ const Education = ({ update }) => {
           })
           .catch((err)=>console.log("error"+err))
         } else {
-          console.log("id not present");
           const userid = userdata._id
           const url = `http://localhost:5000/education/add/${userid}`
           axios
@@ -163,7 +198,7 @@ const Education = ({ update }) => {
         } else {
       console.log(education);
       const id = userdata._id;
-      const url = `http://localhost:5000/education/add/${id}`;
+      const url = `${process.env.REACT_APP_EDU_URL}/add/${id}`;
       for (var i = 0; i < education.length; i++) {
         console.log(education[i]);
         console.log(i);
@@ -199,15 +234,29 @@ const Education = ({ update }) => {
       description: "",
     };
     if (update) {
-      addEducationDetails(elem);
+      setEducationDetails([...educationDetails,elem])
     }
     setEducation([...education, elem]);
   };
 
   const handleRemoveItem = (index) => {
-    const list = [...education];
-    list.splice(index, 1);
-    setEducation(list);
+    // if(update)
+    //   {
+    //     this.forceUpdate(()=>{
+    //       console.log("updating")
+    //     })
+    //   }
+        console.log(index)
+        const list = [...education];
+        console.log(education)
+        console.log(list[index])
+        // list.splice(index, 1);
+        delete list[index]
+        setEducation(list);
+        console.log(list)
+      
+      
+   
   };
 
   return (
@@ -215,19 +264,36 @@ const Education = ({ update }) => {
       <div>
         <div className="section-tab">
           <header className="section-header">EDUCATION SECTION</header>
-          {update ? (
-            <div className="education-container">
+          {update ?   (
+            <>
+            {isEmpty ? (<div className="education-container">
               {educationDetails.map((item, index) => {
+                return (
+                  <EducationTab
+                    key={item._id}
+                    index={index}
+                    item={item}
+                    array = {[...educationDetails]}
+                    onRemove={handleRemoveItem}
+                  />
+                );
+              })}
+            </div>) : (
+              <div className="education-container">
+              {education.map((item, index) => {
                 return (
                   <EducationTab
                     key={index}
                     index={index}
                     item={item}
+                    array = {[...education]}
                     onRemove={handleRemoveItem}
                   />
                 );
               })}
             </div>
+            )}
+            </>
           ) : (
             <div className="education-container">
               {education.map((item, index) => {
@@ -236,6 +302,7 @@ const Education = ({ update }) => {
                     key={index}
                     index={index}
                     item={item}
+                    array = {[...education]}
                     onRemove={handleRemoveItem}
                   />
                 );

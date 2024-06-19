@@ -33,17 +33,19 @@ const AboutSection = ({ update }) => {
       setSaveData(data)
     }
   }, [imageurl]);
-
+  const showImage = ()=>{
+    console.log(profileImg)
+  }
   const handleImageUpload = async (e) => {
     setProfileImg(e.target.files[0]);
-    
+    showImage()
   };
 
 const uploadImage = async ()=>{
   const formData = new FormData();
   formData.append("image", profileImg);
   formData.append("description", summary);
-  axios.defaults.baseURL = "http://localhost:5000/upload";
+  axios.defaults.baseURL = `${process.env.REACT_APP_BASE_URL}/upload`;
   await axios
     .post("/", formData, {
       headers: { "Content-Type": "multipart/form-data" },
@@ -61,9 +63,12 @@ const uploadImage = async ()=>{
     if(savedata !== null)
       {
         const id = userdata._id
-        const url = `http://localhost:5000/about/add/${id}`
+        const url = `${process.env.REACT_APP_ABOUT_URL}/add/${id}`
         axios.post(url,savedata)
         .then(res=>{
+          axios.post(`${process.env.REACT_APP_BASE_URL}/update/${id}`,{userdata})
+          .then(res=>{console.log("created profile succesfully")})
+          .catch(err=>console.log("error  " + err))
           Swal.fire({
             title : "Success",
             text : res.data,
@@ -75,9 +80,7 @@ const uploadImage = async ()=>{
       else{
         console.log("not working")
       }
-    
-
-      
+     
   };
   return (
     <div>

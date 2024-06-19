@@ -6,10 +6,19 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 const Register = () => {
     const [username , setUsername] = useState()
-    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const {handleLoginUser} = useAppContext();
+
+     const [firstName, setFirstName] = useState("");
+    const [middleName, setMiddleName] = useState("");
+    const [lastName, setLastName] = useState("");
+   
+    const [email, setEmail] = useState("");
+
+
+
+
     const navigate = useNavigate()
     const handleLoginBtn = async () => {
         const signupData = {
@@ -17,7 +26,7 @@ const Register = () => {
             email : email,
             password : password
         }
-        const url = "http://localhost:5000/users/add"
+        const url = `${process.env.REACT_APP_USER_URL}/add`
         axios.post(url,signupData)
         .then(res=>{
             Swal.fire({
@@ -28,7 +37,6 @@ const Register = () => {
             navigate("/")
         })
         .catch(err=>console.log(err))
-        
     };
   return (
     <>
@@ -37,14 +45,26 @@ const Register = () => {
         <h2>Sign Up</h2>   
       <form>
       <div>
-          <label className="input-label">Username:</label>
+          <label className="input-label">First Name :</label>
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             className="input-field"
           />
         </div>
+        <div>
+          <label className="input-label">LastName :</label>
+          <input
+            type="text"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            className="input-field"
+          />
+        </div>
+
+
+
         <div>
           <label className="input-label">E-Mail:</label>
           <input
