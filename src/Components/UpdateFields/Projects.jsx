@@ -51,7 +51,7 @@ const Projects = ({update}) => {
   };
   useEffect(() => {
     const id = localStorage.getItem("userid");
-    const url = `${process.env.REACT_APP_PRO_URL}/${id}`;
+    const url = `${process.env.REACT_APP_BASE_URL}/projects/${id}`;
     try {
       if (isLogin && projectData.length < 1 ) {
         axios
@@ -109,14 +109,14 @@ const Projects = ({update}) => {
                 if("_id" in projectData[i])
                   {
                     const id = projectData[i]._id 
-                    const url = `${process.env.REACT_APP_PRO_URL}/update/${id}`
+                    const url = `${process.env.REACT_APP_BASE_URL}/projects/update/${id}`
                     axios.post(url,projectData[i])
                     .then(res=>{console.log(res.data)})
                     .catch(err=>console.log(err))
                   }
                   else{
                     const id = userdata._id 
-                    const url = `${process.env.REACT_APP_PRO_URL}/add/${id}`
+                    const url = `${process.env.REACT_APP_BASE_URL}/projects/add/${id}`
                     axios.post(url,projectData[i])
                     .then(res=>{console.log("lakjashfkajghfgd"+res.data)})
                     .catch(err=>console.log("............errorrrrr"+err))
@@ -130,7 +130,7 @@ const Projects = ({update}) => {
           }
           else{
             const id = userdata._id 
-            const url = `${process.env.REACT_APP_PRO_URL}/add/${id}`
+            const url = `${process.env.REACT_APP_BASE_URL}/projects/add/${id}`
             for(var i=0 ; i<projects.length ;i++)
               {
                 axios.post(url,projects[i])

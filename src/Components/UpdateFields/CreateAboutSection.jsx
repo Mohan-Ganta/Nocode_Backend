@@ -11,7 +11,7 @@ const CreateAboutSection = () => {
 
   useEffect(() => {
     const id = userdata._id;
-    const url = `${process.env.REACT_APP_ABOUT_URL}/${id}`;
+    const url = `${process.env.REACT_APP_BASE_URL}/about/${id}`;
     if (!savedata) {
       axios
         .get(url)
@@ -74,7 +74,7 @@ const CreateAboutSection = () => {
     const result = await uploadImage();
     if (savedata !== null) {
       const id = savedata._id;
-      const url = `${process.env.REACT_APP_ABOUT_URL}/update/${id}`;
+      const url = `${process.env.REACT_APP_BASE_URL}/about/update/${id}`;
       axios
         .post(url, savedata)
         .then((res) => {

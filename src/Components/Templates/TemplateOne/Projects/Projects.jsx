@@ -18,7 +18,7 @@ const Projects = () => {
     const [projectData, setProjectData] = useState([]);
   const id = localStorage.getItem("userid");
   useEffect(() => {
-    const url = `${process.env.REACT_APP_PRO_URL}/${id}`;
+    const url = `${process.env.REACT_APP_BASE_URL}/projects/${id}`;
     console.log(url)
     try {
       if (projectData.length < 1) {

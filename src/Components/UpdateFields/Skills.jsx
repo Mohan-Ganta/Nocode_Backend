@@ -50,7 +50,7 @@ const Skills = ({ update }) => {
   };
   useEffect(() => {
     const id = localStorage.getItem("userid");
-    const url = `${process.env.REACT_APP_SKILLS_URL}/${id}`;
+    const url = `${process.env.REACT_APP_BASE_URL}/skills/${id}`;
     try {
       if (isLogin && skillData.length < 1) {
         axios
@@ -73,7 +73,7 @@ const Skills = ({ update }) => {
       for (var i = 0; i < skillData.length; i++) {
         if ("_id" in skillData[i]) {
           const id = skillData[i]._id;
-          const url = `${process.env.REACT_APP_SKILLS_URL}/update/${id}`;
+          const url = `${process.env.REACT_APP_BASE_URL}/skills/update/${id}`;
 
           axios
             .post(url, skillData[i])
@@ -83,7 +83,7 @@ const Skills = ({ update }) => {
             });
         } else {
           const id = userdata._id;
-          const url = `${process.env.REACT_APP_SKILLS_URL}/add/${id}`;
+          const url = `${process.env.REACT_APP_BASE_URL}/skills/add/${id}`;
           axios
             .post(url, skillData[i])
             .then((res) => console.log(res.data))
@@ -97,7 +97,7 @@ const Skills = ({ update }) => {
       });
     } else {
       const id = userdata._id;
-      const url = `${process.env.REACT_APP_SKILLS_URL}/add/${id}`;
+      const url = `${process.env.REACT_APP_BASE_URL}/skills/add/${id}`;
 
       for (var i = 0; i < skills.length; i++) {
         axios

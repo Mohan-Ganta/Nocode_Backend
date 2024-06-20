@@ -25,7 +25,7 @@ const Register = () => {
             email : email,
             password : password
         }
-        const url = `${process.env.REACT_APP_USER_URL}/add`
+        const url = `${process.env.REACT_APP_BASE_URL}/users/add`
         axios.post(url,signupData)
         .then(res=>{
             Swal.fire({

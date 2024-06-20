@@ -13,7 +13,7 @@ const Navbar = () => {
   useEffect(() => {
     if (data !== null && isLogin) {
       const id = userdata._id;
-      const url = `${process.env.REACT_APP_ABOUT_URL}/${id}`;
+      const url = `${process.env.REACT_APP_BASE_URL}/about/${id}`;
       axios.get(url).then((res) => {
         setProfileImg(res.data?.imageurl);
         setHasProfile(userdata.hasProifile)

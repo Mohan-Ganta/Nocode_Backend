@@ -18,7 +18,7 @@ const Certification = () => {
     const [certData, setCertData] = useState([]);
   const id = localStorage.getItem("userid");
   useEffect(() => {
-    const url = `${process.env.REACT_APP_CERT_URL}/${id}`;
+    const url = `${process.env.REACT_APP_BASE_URL}/certificates/${id}`;
     console.log(url)
     try {
       if (certData.length < 1) {

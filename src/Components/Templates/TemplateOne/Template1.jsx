@@ -18,7 +18,7 @@ const Template1 = () => {
   const [gotData,setGotData] = useState(true)
   useEffect(() => {
     const id = localStorage.getItem("userid");
-    const url = `${process.env.REACT_APP_ABOUT_URL}/${id}`;
+    const url = `${process.env.REACT_APP_BASE_URL}/about/${id}`;
     console.log(url)
     if (gotData) {
       axios

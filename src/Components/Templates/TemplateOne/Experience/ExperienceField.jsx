@@ -19,7 +19,7 @@ const ExperienceField = () => {
   const [expdata, setExpData] = useState([]);
   const id = localStorage.getItem("userid");
   useEffect(() => {
-    const url = `${process.env.REACT_APP_EX_URL}/${id}`;
+    const url = `${process.env.REACT_APP_BASE_URL}/experience/${id}`;
     console.log(url)
     try {
       if (expdata.length < 1) {

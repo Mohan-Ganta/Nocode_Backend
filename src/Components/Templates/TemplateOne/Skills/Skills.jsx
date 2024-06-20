@@ -15,7 +15,7 @@ const Skills = () => {
     const [skillData, setSkills] = useState([]);
   const id = localStorage.getItem("userid");
   useEffect(() => {
-    const url = `${process.env.REACT_APP_SKILLS_URL}/${id}`;
+    const url = `${process.env.REACT_APP_BASE_URL}/skills/${id}`;
     console.log(url)
     try {
       if (skillData.length < 1) {

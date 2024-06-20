@@ -51,7 +51,7 @@ const Certifications = ({update}) => {
   };
   useEffect(() => {
     const id = localStorage.getItem("userid");
-    const url = `${process.env.REACT_APP_CERT_URL}/${id}`;
+    const url = `${process.env.REACT_APP_BASE_URL}/certificates/${id}`;
     try {
       if (isLogin && certificationData.length < 1 ) {
         axios
@@ -108,14 +108,14 @@ const Certifications = ({update}) => {
                 if("_id" in certificationData[i])
                   {
                     const id = certificationData[i]._id
-                    const url = `${process.env.REACT_APP_CERT_URL}/update/${id}`
+                    const url = `${process.env.REACT_APP_BASE_URL}/certificates/update/${id}`
                     axios.post(url,certificationData[i])
                     .then(res=>console.log(res.data))
                     .catch(err=>console.log(err))
                   }
                   else{
                     const id = userdata._id
-                    const url = `${process.env.REACT_APP_CERT_URL}/add/${id}`
+                    const url = `${process.env.REACT_APP_BASE_URL}/certificates/add/${id}`
                     axios.post(url,certificationData[i])
                     .then(res=>console.log(res.json))
                     .catch(err=>console.log(err))
@@ -129,7 +129,7 @@ const Certifications = ({update}) => {
           }
           else{
             const id = userdata._id 
-            const url = `${process.env.REACT_APP_CERT_URL}/add/${id}`
+            const url = `${process.env.REACT_APP_BASE_URL}/certificates/add/${id}`
             for(var i=0;i<certification.length;i++)
               {
                 axios.post(url,certification[i])

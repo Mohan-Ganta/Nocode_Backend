@@ -110,7 +110,7 @@ const Experience = ({ update }) => {
   };
   useEffect(() => {
     const id = localStorage.getItem("userid");
-    const url = `${process.env.REACT_APP_EX_URL}/${userdata._id}`;
+    const url = `${process.env.REACT_APP_BASE_URL}/experience/${userdata._id}`;
     try {
       if (experienceDetails.length < 1 && isLogin && update ) {
         axios
@@ -144,7 +144,7 @@ const Experience = ({ update }) => {
       for (var i = 0; i < experienceDetails.length; i++) {
         if ("_id" in experienceDetails[i]) {
           const id = experienceDetails[i]._id;
-          const url = `${process.env.REACT_APP_EX_URL}/update/${id}`;
+          const url = `${process.env.REACT_APP_BASE_URL}/experience/update/${id}`;
           axios.post(url,experienceDetails[i])
           .then((res)=>{
             
@@ -155,7 +155,7 @@ const Experience = ({ update }) => {
         else{
           console.log("id not present")
           const id = userdata._id 
-          const url = `${process.env.REACT_APP_EX_URL}/add/${id}`
+          const url = `${process.env.REACT_APP_BASE_URL}/experience/add/${id}`
           axios.post(url,experienceDetails[i])
           .then((res)=>console.log(res.data))
           .catch(err=>console.log(err))
@@ -173,7 +173,7 @@ const Experience = ({ update }) => {
       });
     } else {
       const id = userdata._id;
-      const url = `${process.env.REACT_APP_EX_URL}/add/${id}`;
+      const url = `${process.env.REACT_APP_BASE_URL}/experience/add/${id}`;
       for (var i = 0; i < experience.length; i++) {
         axios
           .post(url, experience[i])

@@ -22,7 +22,7 @@ export const AppProvider = ({ children }) => {
     const token = Cookies.getItem("authToken");
     const currentUserdata = localStorage.getItem("userdata");
     if (token) setIsLogin(true);
-    const url = `${process.env.REACT_APP_USER_URL}/${localStorage.getItem("userid")}`;
+    const url = `${process.env.REACT_APP_BASE_URL}/users/${localStorage.getItem("userid")}`;
     axios
       .get(url)
       .then((res) => setUserdata(res.data))

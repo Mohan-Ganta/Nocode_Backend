@@ -17,7 +17,7 @@ const EducationField = () => {
   const [educationData, setEducationData] = useState([]);
   const id = localStorage.getItem("userid");
   useEffect(() => {
-    const url = `${process.env.REACT_APP_EDU_URL}/${id}`;
+    const url = `${process.env.REACT_APP_BASE_URL}/education/${id}`;
     console.log(url)
     try {
       if (educationData.length < 1) {

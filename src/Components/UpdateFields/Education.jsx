@@ -20,7 +20,7 @@ const EducationTab = ({ index, item, onRemove ,array}) => {
 const handleDelete = ()=>{
   onRemove(array.indexOf(item))
   console.log("deleting")
-  const url = `http://localhost:5000/education/delete/${item._id}`
+  const url = `${process.env.REACT_APP_BASE_URL}/education/delete/${item._id}`
   axios.delete(url)
   .then(res=>{
     console.log(res.data)
@@ -130,7 +130,7 @@ const Education = ({ update }) => {
 
   useEffect(() => {
     const id = localStorage.getItem("userid");
-    const url = `http://localhost:5000/education/${id}`;
+    const url = `${process.env.REACT_APP_BASE_URL}/education/${id}`;
     try {
       if (educationDetails.length < 1 && isLogin) {
         axios
@@ -166,7 +166,7 @@ const Education = ({ update }) => {
         if ("_id" in educationDetails[i]) {
           const id = educationDetails[i]._id;
           console.log("id is : " + id);
-          const url = `http://localhost:5000/education/update/${id}`;
+          const url = `${process.env.REACT_APP_BASE_URL}/education/update/${id}`;
           axios.post(url, educationDetails[i])
           .then((res) => {
             console.log(res.data);
@@ -174,7 +174,7 @@ const Education = ({ update }) => {
           .catch((err)=>console.log("error"+err))
         } else {
           const userid = userdata._id
-          const url = `http://localhost:5000/education/add/${userid}`
+          const url = `${process.env.REACT_APP_BASE_URL}/education/add/${userid}`
           axios
           .post(url, educationDetails[i])
           .then((res) => {
@@ -198,7 +198,7 @@ const Education = ({ update }) => {
         } else {
       console.log(education);
       const id = userdata._id;
-      const url = `${process.env.REACT_APP_EDU_URL}/add/${id}`;
+      const url = `${process.env.REACT_APP_BASE_URL}/education/add/${id}`;
       for (var i = 0; i < education.length; i++) {
         console.log(education[i]);
         console.log(i);
